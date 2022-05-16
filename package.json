@@ -1,0 +1,23 @@
+{
+  "name": "bankist-homepage",
+  "version": "1.0.0",
+  "description": "Bankist Homepage Project",
+  "default": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeevDevs/bankist-homepage.git"
+  },
+  "author": "Dmitriy Vnuchkov (based on Jonas Shmedtmann's course)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DeevDevs/bankist-homepage/issues"
+  },
+  "homepage": "https://github.com/DeevDevs/bankist-homepage#readme",
+  "devDependencies": {
+    "parcel": "^2.5.0"
+  }
+}

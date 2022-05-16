@@ -673,3 +673,9 @@ h4 {
   font-size: 1.5rem;
   font-weight: 400;
 }
+
+.img-set {
+  display: none;
+  margin: 0;
+  padding: 0;
+}

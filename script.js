@@ -18,6 +18,12 @@ const dotsContainer = document.querySelector('.dots');
 const invisibleImages = document.querySelectorAll('.img-set');
 const imagesToReplace = document.querySelectorAll('.features__img');
 
+/**
+ * replaces lazy images with quality images (заменяет ленивые изображения более качественными)
+ * @param {}
+ * @returns {undefined}
+ * @author Jonas Shmedtmann
+ */
 const addingImagesPaths = function () {
   imagesToReplace.forEach((el, i) => {
     const splittedString = invisibleImages[i].src.split('/');
@@ -25,42 +31,48 @@ const addingImagesPaths = function () {
   });
 };
 
+/////////////////// MODAL WINDOW MANIPULATIONS ///////////////////
+////////////// МАНИПУЛЯЦИИ С ОКНОМ СОЗДАНИЯ АККАУНТА /////////////
+/**
+ * the next two functions display/hide the modal window (следующие две функции отображают/прячут окно создания аккаунта)
+ * @param {event}
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const openModal = function (e) {
   e.preventDefault();
   modal.classList.remove('hidden');
   overlay.classList.remove('hidden');
 };
-
 const closeModal = function () {
   modal.classList.add('hidden');
   overlay.classList.add('hidden');
 };
 
-//opening/closing the Modal Window
-// for (let i = 0; i < btnsOpenModal.length; i++)
-//   btnsOpenModal[i].addEventListener('click', openModal); Let us use forEach instead
+//adding a set of listeners for modal window manipulations (добавляем ряд приемников событий для работы с окном создания аккаунта)
 btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
-
 btnCloseModal.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
-
 document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
     closeModal();
   }
 });
+////////////////////////////////////////////////////////////
 
-// SMOOTH SCROLLING to the section 1
+// 'Learn More' button activation (приемник события на кнопке 'Learn More')
 btnScrollTo.addEventListener('click', function (e) {
   section1.scrollIntoView({ behavior: 'smooth' });
 });
 
-// SMOOTH SCROLLING FROM ALL NAV BUTTONS - Event Delegation
-//1. add eventListener to common parent element
-//2. Determine, what element originated the event (e.target)
+/**
+ * scrolling activation through event delegation (скролл страницы с помощью делегирования событий)
+ * @param {event}
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 document.querySelector('.nav__links').addEventListener('click', function (e) {
   e.preventDefault();
-  //below, we check if the element we are clicking containts the class needed. Otherwise, the entire parent element activates the scrolling and creates an error
   if (
     e.target.classList.contains('nav__link') &&
     !e.target.classList.contains('btn--show-modal')
@@ -71,32 +83,44 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
   }
 });
 
-// BUILDING A TABBED COMPONENT
+///////////////////////// BUILDING A TABBED COMPONENT ///////////////////////////
+//////////////////////////// КОМПОНЕНТ С ВКЛАДКАМИ /////////////////////////////
 const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 
+/**
+ * manipulates the component with tabs (манипулирует компонентом с вкладками)
+ * @param {event}
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 tabsContainer.addEventListener('click', function (e) {
   const clicked = e.target.closest('.operations__tab');
-  //Guard Clause - used to terminate function, if needed
   if (!clicked) return;
-  //Before activating the tab and the content window, I remove the active class from all of them to assign it to the ones I need
+  //remove the active class from all of them (убрать активирующий класс со всех элементов)
   tabsContent.forEach(child =>
     child.classList.remove('operations__content--active')
   );
   tabs.forEach(tab => tab.classList.remove('operations__tab--active'));
-
-  //Activating the tab
+  //Activating the tab (активировать нужную вкладку)
   clicked.classList.add('operations__tab--active');
-  //Activating content - I used the data-tab attribute through dataset to find the window
+  //Activating content using the data-tab attribute (активировать контент используя data атрибут)
   document
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
 
-// MENU FADE ANIMATION
+////////////////////// MENU FADE ANIMATION ////////////////////////
+//////////////////// ЭФФЕКТ ЗАТЕМНЕНИЯ МЕНЮ //////////////////////
 const nav = document.querySelector('.nav');
 
+/**
+ * adds fading effect to the menu buttons (добавляет эффект затемнения элементам меню)
+ * @param {event} and the bind value (this)
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const hoverHandler = function (e) {
   if (e.target.classList.contains('nav__link')) {
     const link = e.target;
@@ -107,50 +131,52 @@ const hoverHandler = function (e) {
       logo.style.opacity = this;
     });
   }
-}; //we use mouseover because it bubbles, while mouseenter doesn't
+};
 
-// nav.addEventListener('mouseover', function (e) {
-//   hoverHandler(e, 0.5);
-// });
-// nav.addEventListener('mouseout', function (e) {
-//   hoverHandler(e, 1);
-// });
-//instead of putting the function inside and make it look ugly, we can use the BIND method and pass the 'argument' into the handler. we just leave the 'e' argument in the initial function, and use THIS in the opacity (Read More)
+// adding listeners for the hover effect and binding values for opacity (добавляем приемники событий и привязываем значения для прозрачности элементов)
 nav.addEventListener('mouseover', hoverHandler.bind(0.5));
 nav.addEventListener('mouseout', hoverHandler.bind(1));
 
-// STICKY NAVIGATION EFFECT just for the section 1 (old version)
-// const initialCoords = section1.getBoundingClientRect();
-// window.addEventListener('scroll', function () {
-//   if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
-//   else nav.classList.remove('sticky');
-// });
-
-// STICKY NAVIGATION: Intersection Observer API
+////////////////// STICKY NAVIGATION USING INTERSECTION OBSERVER API /////////////////////////
+///////// ГЛАВНОЕ МЕНЮ С ЭФФЕКТОМ "STICKY" С ИСПОЛЬЗОВАНИЕМ INTERSECTION OBSERVER API ////////
 const navHeight = nav.getBoundingClientRect().height;
+
+/**
+ * adds sticky features to the header menu (добавляет эффект 'sticky' меню в верху страницы)
+ * @param {entries} values sent by the API
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const obsCallback = function (entries) {
-  // nav.classList.contains('sticky')
-  //   ? nav.classList.add('sticky')
-  //   : nav.classList.remove('sticky');
-  //OR
-  const [entry] = entries; // this is how I select ONE entry of the entries (here it is always one)
+  // retrieve the element parameters (выводим параметры элемента на момент времени/положения)
+  const [entry] = entries;
   if (!entry.isIntersecting) nav.classList.add('sticky');
-  // isIntersecting is a property of the entry
   else nav.classList.remove('sticky');
-}; // It is called with two arguments
+};
+
+// creating options for the Intersection Observer (прописываем параметры для Intersection Observer API)
 const obsOptions = {
   root: null,
   threshold: 0,
-  rootMargin: `-${navHeight}px`, // This is to modify the treshold slightly. E.g. here it shows that I want the function to be called navHeight BEFORE the end of the Header intersection
-}; // Also, I can insert it directly into the arguments below
+  rootMargin: `-${navHeight}px`,
+};
+
+// adding and activating the observer (добавляем и акивируем API)
 const headerObserver = new IntersectionObserver(obsCallback, obsOptions);
 headerObserver.observe(header);
 
-// REVEAL SECTIONS using Intersection Observer API
+/////////////////// REVEAL SECTIONS USING INTERSECTION OBSERVER API /////////////////////
+//////////// ПОЯВЛЕНИЕ СЕКЦИЙ С ИСПОЛЬЗОВАНИЕМ INTERSECTION OBSERVER API ////////////////
 const allSections = document.querySelectorAll('.section');
 
+/**
+ * adds fading effect to the menu buttons (добавляет эффект затемнения элементам меню)
+ * @param {event} and the bind value (this)
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const revealSection = function (entries, observer) {
-  const [entry] = entries; // here we get just one entry out of entries
+  const [entry] = entries;
   if (!entry.isIntersecting) return;
   entry.target.classList.remove('section--hidden'); // To make that only section reveal, which I am looking at...
   observer.unobserve(entry.target); // To stop obsering the section which has already been revealed (for the sake of the performance)
@@ -164,8 +190,7 @@ allSections.forEach(function (section) {
   sectionObserver.observe(section);
 });
 
-//LAZY LOADING IMAGES
-
+// LAZY LOADING IMAGES
 const imgTargets = document.querySelectorAll('img[data-src]'); // This is how we use only the images that have the data-src attribute (have higher resolution versions)
 
 const revealImage = function (entries, observer) {

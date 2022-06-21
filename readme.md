@@ -1,0 +1,3 @@
+It is a homepage for an imaginary platform that provides banking services. The webpage was created byJonas Shmedtmann (see his Udemy account: https://www.udemy.com/user/jonasschmedtmann/), while I participated in building, and eventually deployed it through the Netlify. The webpage was built to practice advanced DOM manipulation skills.
+
+Этот проект представляет собой домашнюю страницу воображаемой платформы, предоставляющей банковские услуги. Изначально проект придуман Йонасом Шмедтманном (аккаунт на Udemy: https://www.udemy.com/user/jonasschmedtmann/), в то время как я участвовал в его создании и запуске на платформе Netlify. Эта веб-страница была создана для отработки практических навыков в работе с DOM-элементами.

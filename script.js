@@ -1,7 +1,6 @@
 'use strict';
 
 ///////////////////////////////////////
-// Modal window
 const header = document.querySelector('.header');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
@@ -10,7 +9,7 @@ const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector(`.btn--scroll-to`);
 const section1 = document.querySelector('#section--1');
 const h1 = document.querySelector('h1');
-//Variables for Slides
+//Variables for Slides (переменные для слайд компонента)
 const slides = document.querySelectorAll('.slide');
 const btnLeft = document.querySelector('.slider__btn--left');
 const btnRight = document.querySelector('.slider__btn--right');
@@ -35,7 +34,7 @@ const addingImagesPaths = function () {
 ////////////// МАНИПУЛЯЦИИ С ОКНОМ СОЗДАНИЯ АККАУНТА /////////////
 /**
  * the next two functions display/hide the modal window (следующие две функции отображают/прячут окно создания аккаунта)
- * @param {event}
+ * @param {event object}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -67,7 +66,7 @@ btnScrollTo.addEventListener('click', function (e) {
 
 /**
  * scrolling activation through event delegation (скролл страницы с помощью делегирования событий)
- * @param {event}
+ * @param {event object}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -91,7 +90,7 @@ const tabsContent = document.querySelectorAll('.operations__content');
 
 /**
  * manipulates the component with tabs (манипулирует компонентом с вкладками)
- * @param {event}
+ * @param {event object}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -117,7 +116,7 @@ const nav = document.querySelector('.nav');
 
 /**
  * adds fading effect to the menu buttons (добавляет эффект затемнения элементам меню)
- * @param {event} and the bind value (this)
+ * @param {event object}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -143,7 +142,7 @@ const navHeight = nav.getBoundingClientRect().height;
 
 /**
  * adds sticky features to the header menu (добавляет эффект 'sticky' меню в верху страницы)
- * @param {entries} values sent by the API
+ * @param {array}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -171,7 +170,7 @@ const allSections = document.querySelectorAll('.section');
 
 /**
  * reveals the section that is entering the viewport (проявляет секцию попавшую в поле зрения пользователя)
- * @param {entries, observer} observer theand the bind value (this)
+ * @param {array, observer}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -199,7 +198,7 @@ const imgTargets = document.querySelectorAll('img[data-src]');
 
 /**
  * replaces the images with those with highe resolution (заменяет изображения на изображения с лучшим качеством)
- * @param {entries, observer} observer theand the bind value (this)
+ * @param {array, observer}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -247,7 +246,7 @@ const createDots = function () {
 
 /**
  * supporting functions to manipulate slides (вспомогательные функции для манипуляции слайдами)
- * @param {current slide}
+ * @param {DOM-element}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -275,7 +274,7 @@ const prevSlide = function () {
 
 /**
  * makes the chosen dot prominent (выделяет выбранную точку)
- * @param {current slide}
+ * @param {DOM-element}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -310,7 +309,7 @@ document.addEventListener('keydown', function (e) {
 
 /**
  * delegates event to activate slide change (делегирует событие чтобы запустить смену слайда)
- * @param {event}
+ * @param {event object}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */

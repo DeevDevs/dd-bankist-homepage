@@ -49,7 +49,7 @@ const closeModal = function () {
   overlay.classList.add('hidden');
 };
 
-//adding a set of listeners for modal window manipulations (добавляем ряд приемников событий для работы с окном создания аккаунта)
+//adding a set of listeners for modal window manipulations (добавляет ряд приемников событий для работы с окном создания аккаунта)
 btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
 btnCloseModal.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
@@ -98,14 +98,14 @@ const tabsContent = document.querySelectorAll('.operations__content');
 tabsContainer.addEventListener('click', function (e) {
   const clicked = e.target.closest('.operations__tab');
   if (!clicked) return;
-  //remove the active class from all of them (убрать активирующий класс со всех элементов)
+  //remove the active class from all of them (убирает активирующий класс со всех элементов)
   tabsContent.forEach(child =>
     child.classList.remove('operations__content--active')
   );
   tabs.forEach(tab => tab.classList.remove('operations__tab--active'));
-  //Activating the tab (активировать нужную вкладку)
+  //Activating the tab (активирует нужную вкладку)
   clicked.classList.add('operations__tab--active');
-  //Activating content using the data-tab attribute (активировать контент используя data атрибут)
+  //Activating content using the data-tab attribute (активирует контент используя data атрибут)
   document
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
@@ -170,17 +170,19 @@ headerObserver.observe(header);
 const allSections = document.querySelectorAll('.section');
 
 /**
- * adds fading effect to the menu buttons (добавляет эффект затемнения элементам меню)
- * @param {event} and the bind value (this)
+ * reveals the section that is entering the viewport (проявляет секцию попавшую в поле зрения пользователя)
+ * @param {entries, observer} observer theand the bind value (this)
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
 const revealSection = function (entries, observer) {
   const [entry] = entries;
   if (!entry.isIntersecting) return;
-  entry.target.classList.remove('section--hidden'); // To make that only section reveal, which I am looking at...
-  observer.unobserve(entry.target); // To stop obsering the section which has already been revealed (for the sake of the performance)
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
 };
+
+// adding the observer to each section (добавляем API к каждой секции)
 const sectionObserver = new IntersectionObserver(revealSection, {
   root: null,
   threshold: 0.15,
@@ -190,43 +192,50 @@ allSections.forEach(function (section) {
   sectionObserver.observe(section);
 });
 
-// LAZY LOADING IMAGES
-const imgTargets = document.querySelectorAll('img[data-src]'); // This is how we use only the images that have the data-src attribute (have higher resolution versions)
+//////////////////////// LAZY LOADING IMAGES ///////////////////////////
+/////////////////////// ЛЕНИВЫЕ ИЗОБРАЖЕНИЯ ///////////////////////////
 
+const imgTargets = document.querySelectorAll('img[data-src]');
+
+/**
+ * replaces the images with those with highe resolution (заменяет изображения на изображения с лучшим качеством)
+ * @param {entries, observer} observer theand the bind value (this)
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const revealImage = function (entries, observer) {
   const [entry] = entries;
   if (!entry.isIntersecting) return;
-
-  //replace src with data-src
   entry.target.src = entry.target.dataset.src;
-
-  //Instead of removing the lazy-img class immediately, better to wait for the picture loading is over, and then only remove the class. Let us use the EventListener
   entry.target.addEventListener('load', function () {
     entry.target.classList.remove('lazy-img');
   });
-
-  //stop observing
   observer.unobserve(entry.target);
 };
 
+// adding the observer to each image (добавляем API к каждому изображению)
 const imgObserver = new IntersectionObserver(revealImage, {
   root: null,
   threshold: 0,
-  rootMargin: '200px', // This parameter makes the images load 200px BEFORE they reach the root (viewport)
+  rootMargin: '200px',
 });
 imgTargets.forEach(function (img) {
   imgObserver.observe(img);
 });
 
-//here we place each of the slides in one row
+/////////////////////// SLIDER COMPONENT WITH COMMENTS ////////////////////////
+/////////////////// КОМПОНЕНТ СО СЛАЙДАМИ С КОММЕНТАРИЯМИ /////////////////////
+
 slides.forEach((s, i) => (s.style.transform = `translateX(${100 * i}%)`));
 
-//---- here we create functions for the buttons ----
-
-//common variable for most of the functions below
 let curSlide = 0;
 
-//This is how we create the dots for slides
+/**
+ * creates dots for the slide component (создает точки для манипуляции слайдами)
+ * @param {}
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const createDots = function () {
   slides.forEach(function (_, i) {
     dotsContainer.insertAdjacentHTML(
@@ -236,7 +245,12 @@ const createDots = function () {
   });
 };
 
-// this is a general sliding function
+/**
+ * supporting functions to manipulate slides (вспомогательные функции для манипуляции слайдами)
+ * @param {current slide}
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const goToSlide = function (cuS) {
   slides.forEach(
     (s, i) => (s.style.transform = `translateX(${100 * (i - cuS)}%)`)
@@ -244,67 +258,59 @@ const goToSlide = function (cuS) {
   activateDot(curSlide);
 };
 
+/**
+ * supporting functions to manipulate slides (вспомогательные функции для манипуляции слайдами)
+ * @param {}
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const nextSlide = function () {
-  //first we check if we have reached the last slide. If yes, we jump back to the first one
   curSlide < slides.length - 1 ? curSlide++ : (curSlide = 0);
-  // then we use that value, to move the slides horizontally
   goToSlide(curSlide);
 };
-
 const prevSlide = function () {
   curSlide > 0 ? curSlide-- : (curSlide = slides.length - 1);
   goToSlide(curSlide);
 };
 
+/**
+ * makes the chosen dot prominent (выделяет выбранную точку)
+ * @param {}
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const activateDot = function (cuS) {
   document.querySelectorAll('.dots__dot').forEach(function (dot) {
     dot.classList.remove('dots__dot--active');
-    //Here we choose the slide that should be active
     document
       .querySelector(`.dots__dot[data-slide="${cuS}"]`)
       .classList.add('dots__dot--active');
-    //OR
-    // if (dot.dataset.slide === `${cuS}`) dot.classList.add('dots__dot--active');
   });
 };
-//This is the function that we need to run at the page refresh to create/activate Dots
+
+// activates the slide component on page load (создает компонент при загрузке страницы)
 const init = function () {
   createDots();
   activateDot(curSlide);
   addingImagesPaths();
 };
 
-// -------- Event handlers --------
+// -------- Event handlers (Приемники событий) --------
 btnRight.addEventListener('click', nextSlide);
 btnLeft.addEventListener('click', prevSlide);
 
-// Go to Slide using keyboard Arrows
 document.addEventListener('keydown', function (e) {
-  if (e.key === 'ArrowLeft') prevSlide(); // Notice that I can use either IF
-  e.key === 'ArrowRight' && nextSlide(); // or Short Circuit... both work just fine
+  if (e.key === 'ArrowLeft') prevSlide();
+  e.key === 'ArrowRight' && nextSlide();
 });
 
-//here we do Event Delegation to make dots work
+// delegates event to activate slide change (делегирует событие чтобы запустить смену слайда)
 dotsContainer.addEventListener('click', function (e) {
   if (!e.target.classList.contains('dots__dot')) return;
   curSlide = e.target.dataset.slide;
-  // OR ... below is the example of DESTRUCTURING (Read More)
-  // const { slide } = e.target.dataset;
-  // console.log(slide);
 
   goToSlide(curSlide);
 });
 
-//creating and activating dots at page load
+// initiates slide component activation (запускает активацию слайд компонетна)
 init();
-
-// LIFECYCLE DOM EVENTS
-// DOMContentLoaded is an event, when the HTML DOM tree and the initial JS Script are loaded and executed
-// document.addEventListener('DOMContentLoaded', function (e) {
-//   console.log('HTML parsed and DOM tree built!', e);
-// });
-
-// // Load is an event, when all the sections and images are loaded.
-// window.addEventListener('load', function (e) {
-//   console.log('Page fully loaded!', e);
-// });

@@ -275,7 +275,7 @@ const prevSlide = function () {
 
 /**
  * makes the chosen dot prominent (выделяет выбранную точку)
- * @param {}
+ * @param {current slide}
  * @returns {undefined}
  * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
  */
@@ -288,7 +288,12 @@ const activateDot = function (cuS) {
   });
 };
 
-// activates the slide component on page load (создает компонент при загрузке страницы)
+/**
+ * activates the slide component on page load (создает компонент при загрузке страницы)
+ * @param {}
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 const init = function () {
   createDots();
   activateDot(curSlide);
@@ -298,17 +303,20 @@ const init = function () {
 // -------- Event handlers (Приемники событий) --------
 btnRight.addEventListener('click', nextSlide);
 btnLeft.addEventListener('click', prevSlide);
-
 document.addEventListener('keydown', function (e) {
   if (e.key === 'ArrowLeft') prevSlide();
   e.key === 'ArrowRight' && nextSlide();
 });
 
-// delegates event to activate slide change (делегирует событие чтобы запустить смену слайда)
+/**
+ * delegates event to activate slide change (делегирует событие чтобы запустить смену слайда)
+ * @param {event}
+ * @returns {undefined}
+ * @author Dmitriy Vnuchkov (original idea by Jonas Shmedtmann)
+ */
 dotsContainer.addEventListener('click', function (e) {
   if (!e.target.classList.contains('dots__dot')) return;
   curSlide = e.target.dataset.slide;
-
   goToSlide(curSlide);
 });
 
